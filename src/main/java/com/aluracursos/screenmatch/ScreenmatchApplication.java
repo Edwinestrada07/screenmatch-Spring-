@@ -15,6 +15,7 @@ public class ScreenmatchApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
+		// Ejecutar la clase principal que muestra el menú de opciones
 		Principal principal = new Principal();
 		principal.muestraElMenu();
 
