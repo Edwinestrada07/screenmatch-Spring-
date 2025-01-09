@@ -21,7 +21,7 @@ public class Serie {
     private String poster;
     private String sinopsis;
     private String lenguaje;
-    @OneToMany(mappedBy = "serie")
+    @OneToMany(mappedBy = "serie", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Episodio> episodios;
 
     //Constructor almacena información en un espacio en memoria
@@ -106,6 +106,7 @@ public class Serie {
         return episodios;
     }
     public void setEpisodios(List<Episodio> episodios) {
+        episodios.forEach(e -> e.setSerie(this));
         this.episodios = episodios;
     }
 
@@ -117,6 +118,8 @@ public class Serie {
                 ", evaluacion=" + evaluacion +
                 ", poster='" + poster + '\'' +
                 ", actores='" + actores + '\'' +
-                ", sinopsis='" + sinopsis + '\'';
+                ", sinopsis='" + sinopsis + '\'' +
+                ", lenguaje='" + lenguaje + '\'' +
+                ", episodios=" + episodios;
     }
 }
