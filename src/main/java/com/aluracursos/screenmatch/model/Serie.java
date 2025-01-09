@@ -1,16 +1,28 @@
 package com.aluracursos.screenmatch.model;
 
+import jakarta.persistence.*;
+
+import java.util.List;
 import java.util.OptionalDouble;
 
+@Entity
+@Table(name = "series")
 public class Serie {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long Id;
+    @Column(unique = true)
     private String titulo;
     private Integer totalDeTemporadas;
     private Double evaluacion;
+    @Enumerated(EnumType.STRING)
     private Categoria genero;
     private String actores;
     private String poster;
     private String sinopsis;
     private String lenguaje;
+    @OneToMany(mappedBy = "serie")
+    private List<Episodio> episodios;
 
     //Constructor almacena información en un espacio en memoria
     public Serie(DatosSerie datosSerie) {
@@ -23,6 +35,17 @@ public class Serie {
         this.sinopsis = datosSerie.sinopsis();
         this.lenguaje = datosSerie.lenguaje();
     }
+
+    //Constructor predeterminado
+    public Serie() {}
+
+    public Long getId() {
+        return Id;
+    }
+    public void setId(Long id) {
+        Id = id;
+    }
+
     public String getTitulo() {
         return titulo;
     }
@@ -79,10 +102,17 @@ public class Serie {
         this.lenguaje = lenguaje;
     }
 
+    public List<Episodio> getEpisodios() {
+        return episodios;
+    }
+    public void setEpisodios(List<Episodio> episodios) {
+        this.episodios = episodios;
+    }
+
     @Override
     public String toString() {
         return  "genero=" + genero +
-                "titulo='" + titulo + '\'' +
+                ", titulo='" + titulo + '\'' +
                 ", totalTemporadas=" + totalDeTemporadas +
                 ", evaluacion=" + evaluacion +
                 ", poster='" + poster + '\'' +
