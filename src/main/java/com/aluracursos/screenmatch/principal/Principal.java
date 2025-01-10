@@ -2,10 +2,7 @@
 //mostrar las series encontradas y permitir seleccionar una para ver las temporadas y episodios.
 package com.aluracursos.screenmatch.principal;
 
-import com.aluracursos.screenmatch.model.DatosSerie;
-import com.aluracursos.screenmatch.model.DatosTemporadas;
-import com.aluracursos.screenmatch.model.Episodio;
-import com.aluracursos.screenmatch.model.Serie;
+import com.aluracursos.screenmatch.model.*;
 import com.aluracursos.screenmatch.repository.SerieRepository;
 import com.aluracursos.screenmatch.service.ConsumoAPI;
 import com.aluracursos.screenmatch.service.ConvierteDatos;
@@ -35,6 +32,9 @@ public class Principal {
                     1 - Buscar series 
                     2 - Buscar episodios
                     3 - Mostrar series buscadas
+                    4 - Buscar series por titulo
+                    5 - Top 5 mejores series
+                    6 - Buscar series por categorias
                                   
                     0 - Salir
                     """;
@@ -51,6 +51,15 @@ public class Principal {
                     break;
                 case 3:
                     mostrarSeriesBuscadas();
+                    break;
+                case 4:
+                    buscarSeriesPorTitulo();
+                    break;
+                case 5:
+                    buscarTop5Series();
+                    break;
+                case 6 :
+                    buscarSeriesPorCategoria();
                     break;
                 case 0:
                     System.out.println("Cerrando la aplicación...");
@@ -111,5 +120,28 @@ public class Principal {
         series.stream()
                 .sorted(Comparator.comparing(Serie::getGenero))
                 .forEach(System.out::println);
+    }
+    private void buscarSeriesPorTitulo() {
+        System.out.println("Escribe el nombre de la serie que deseas buscar");
+        var nombreSerie = teclado.nextLine();
+
+        Optional<Serie> serieBuscada = repository.findByTituloContainsIgnoreCase(nombreSerie);
+        if(serieBuscada.isPresent()) {
+            System.out.println("La serie buscada es: " + serieBuscada.get());
+        } else {
+            System.out.println("Serie no encontrada");
+        }
+    }
+    private void buscarTop5Series() {
+        List<Serie> topSeries = repository.findTop5ByOrderByEvaluacionDesc();
+        topSeries.forEach(s -> System.out.println("Serie: " + s.getTitulo() + " Evaluacion: " + s.getEvaluacion()));
+    }
+    private void buscarSeriesPorCategoria() {
+        System.out.println("Escriba el genero/categoria de la serie que desea buscar");
+        var genero = teclado.nextLine();
+        var categoria = Categoria.fromEspanol(genero);
+        List<Serie> seriesPorCategoria = repository.findByGenero(categoria);
+        System.out.println("Las series de la categoria " + genero + " son: ");
+        seriesPorCategoria.forEach(System.out::println);
     }
 }
