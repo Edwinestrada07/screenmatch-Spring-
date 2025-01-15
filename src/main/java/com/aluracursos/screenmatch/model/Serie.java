@@ -114,7 +114,7 @@ public class Serie {
     public String toString() {
         return  "genero=" + genero +
                 ", titulo='" + titulo + '\'' +
-                ", totalTemporadas=" + totalDeTemporadas +
+                ", totalDeTemporadas=" + totalDeTemporadas +
                 ", evaluacion=" + evaluacion +
                 ", poster='" + poster + '\'' +
                 ", actores='" + actores + '\'' +
